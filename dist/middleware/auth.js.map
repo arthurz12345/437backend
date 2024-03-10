@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/middleware/auth.ts"],
+  "sourcesContent": ["import jwt, { Secret, JwtPayload } from 'jsonwebtoken';\nimport { Request, Response, NextFunction } from 'express';\n\nexport function authenticateUser(req: Request, res: Response, next: NextFunction) {\n    //console.log(\"authenticateUser req\", req);\n    const authHeader = req.headers[\"authorization\"];\n    //Getting the 2nd part of the auth header (the token)\n    const token = authHeader && authHeader.split(\" \")[1];\n    //const token = req.header('Authorization')?.replace('Bearer ', '');\n\n    if (!token) {\n      res.status(401).end();\n    } else {\n      jwt.verify(\n        token,\n        process.env.JWT_SECRET as string,\n        (error, decoded) => {\n          if (decoded) {\n            console.log(\"Decoded token\", decoded);\n            next();\n          } else {\n            res.status(401).end();\n          }\n        }\n      );\n    }\n  }\n  "],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,0BAAwC;AAGjC,SAAS,iBAAiB,KAAc,KAAe,MAAoB;AAE9E,QAAM,aAAa,IAAI,QAAQ,eAAe;AAE9C,QAAM,QAAQ,cAAc,WAAW,MAAM,GAAG,EAAE,CAAC;AAGnD,MAAI,CAAC,OAAO;AACV,QAAI,OAAO,GAAG,EAAE,IAAI;AAAA,EACtB,OAAO;AACL,wBAAAA,QAAI;AAAA,MACF;AAAA,MACA,QAAQ,IAAI;AAAA,MACZ,CAAC,OAAO,YAAY;AAClB,YAAI,SAAS;AACX,kBAAQ,IAAI,iBAAiB,OAAO;AACpC,eAAK;AAAA,QACP,OAAO;AACL,cAAI,OAAO,GAAG,EAAE,IAAI;AAAA,QACtB;AAAA,MACF;AAAA,IACF;AAAA,EACF;AACF;",
+  "names": ["jwt"]
+}
